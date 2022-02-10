@@ -50,8 +50,8 @@ class MainPage(webapp2.RequestHandler):
         self.response.write('Using bucket name: {}\n\n'.format(bucket_name))
 # [END get_default_bucket]
 
-        bucket = '/' + bucket_name
-        filename = bucket + '/demo-testfile'
+        bucket = f'/{bucket_name}'
+        filename = f'{bucket}/demo-testfile'
         self.tmp_filenames_to_clean_up = []
 
         self.create_file(filename)
@@ -136,12 +136,13 @@ class MainPage(webapp2.RequestHandler):
             if count != page_size or count == 0:
                 break
             stats = cloudstorage.listbucket(
-                bucket + '/foo', max_keys=page_size, marker=stat.filename)
+                f'{bucket}/foo', max_keys=page_size, marker=stat.filename
+            )
 # [END list_bucket]
 
     def list_bucket_directory_mode(self, bucket):
         self.response.write('Listbucket directory mode result:\n')
-        for stat in cloudstorage.listbucket(bucket + '/b', delimiter='/'):
+        for stat in cloudstorage.listbucket(f'{bucket}/b', delimiter='/'):
             self.response.write(stat)
             self.response.write('\n')
             if stat.is_dir:

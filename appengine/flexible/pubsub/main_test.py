@@ -38,7 +38,7 @@ def test_post_index(client):
 
 
 def test_push_endpoint(client):
-    url = '/pubsub/push?token=' + os.environ['PUBSUB_VERIFICATION_TOKEN']
+    url = f'/pubsub/push?token={os.environ["PUBSUB_VERIFICATION_TOKEN"]}'
 
     r = client.post(
         url,

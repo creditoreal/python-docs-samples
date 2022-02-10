@@ -169,7 +169,7 @@ def test_receive_command(test_registry_id, test_device_id, capsys):  # noqa
     )
 
     # Process commands
-    for i in range(1, 5):
+    for _ in range(1, 5):
         client.loop()
         time.sleep(1)
 

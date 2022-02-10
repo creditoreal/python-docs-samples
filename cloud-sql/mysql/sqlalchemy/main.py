@@ -77,7 +77,9 @@ def init_tcp_connection_engine(db_config):
     host_args = db_host.split(":")
     db_hostname, db_port = host_args[0], int(host_args[1])
 
-    pool = sqlalchemy.create_engine(
+    # [END cloud_sql_mysql_sqlalchemy_create_tcp]
+
+    return sqlalchemy.create_engine(
         # Equivalent URL:
         # mysql+pymysql://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
         sqlalchemy.engine.url.URL.create(
@@ -90,9 +92,6 @@ def init_tcp_connection_engine(db_config):
         ),
         **db_config
     )
-    # [END cloud_sql_mysql_sqlalchemy_create_tcp]
-
-    return pool
 
 
 def init_unix_connection_engine(db_config):
@@ -106,7 +105,9 @@ def init_unix_connection_engine(db_config):
     db_socket_dir = os.environ.get("DB_SOCKET_DIR", "/cloudsql")
     cloud_sql_connection_name = os.environ["CLOUD_SQL_CONNECTION_NAME"]
 
-    pool = sqlalchemy.create_engine(
+    # [END cloud_sql_mysql_sqlalchemy_create_socket]
+
+    return sqlalchemy.create_engine(
         # Equivalent URL:
         # mysql+pymysql://<db_user>:<db_pass>@/<db_name>?unix_socket=<socket_path>/<cloud_sql_instance_name>
         sqlalchemy.engine.url.URL.create(
@@ -117,14 +118,12 @@ def init_unix_connection_engine(db_config):
             query={
                 "unix_socket": "{}/{}".format(
                     db_socket_dir,  # e.g. "/cloudsql"
-                    cloud_sql_connection_name)  # i.e "<PROJECT-NAME>:<INSTANCE-REGION>:<INSTANCE-NAME>"
-            }
+                    cloud_sql_connection_name,
+                )  # i.e "<PROJECT-NAME>:<INSTANCE-REGION>:<INSTANCE-NAME>"
+            },
         ),
         **db_config
     )
-    # [END cloud_sql_mysql_sqlalchemy_create_socket]
-
-    return pool
 
 
 # This global variable is declared with a value of `None`, instead of calling
@@ -161,8 +160,9 @@ def get_index_context():
             "SELECT candidate, time_cast FROM votes " "ORDER BY time_cast DESC LIMIT 5"
         ).fetchall()
         # Convert the results into a list of dicts representing votes
-        for row in recent_votes:
-            votes.append({"candidate": row[0], "time_cast": row[1]})
+        votes.extend(
+            {"candidate": row[0], "time_cast": row[1]} for row in recent_votes
+        )
 
         stmt = sqlalchemy.text(
             "SELECT COUNT(vote_id) FROM votes WHERE candidate=:candidate"
@@ -186,7 +186,7 @@ def save_vote():
     team = request.form["team"]
     time_cast = datetime.datetime.utcnow()
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.warning(team)
         return Response(response="Invalid team specified.", status=400)
 

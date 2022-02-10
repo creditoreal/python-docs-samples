@@ -36,12 +36,9 @@ BACKOFF_MAX_TIME = 500
 
 @pytest.fixture(scope="module")
 def test_dataset():
-    dataset = fhir_stores.create_dataset(
+    yield fhir_stores.create_dataset(
         service_account_json, project_id, cloud_region, dataset_id
     )
-
-    yield dataset
-
     # Clean up
     fhir_stores.delete_dataset(
         service_account_json, project_id, cloud_region, dataset_id
@@ -50,11 +47,13 @@ def test_dataset():
 
 @pytest.fixture(scope="module")
 def test_fhir_store():
-    resp = fhir_stores.create_fhir_store(
-        service_account_json, project_id, cloud_region, dataset_id, test_fhir_store_id
+    yield fhir_stores.create_fhir_store(
+        service_account_json,
+        project_id,
+        cloud_region,
+        dataset_id,
+        test_fhir_store_id,
     )
-
-    yield resp
 
     fhir_stores.delete_fhir_store(
         service_account_json, project_id, cloud_region, dataset_id, test_fhir_store_id

@@ -39,9 +39,7 @@ def stop_billing(data, context):
 
     projects = billing.projects()
 
-    billing_enabled = __is_billing_enabled(PROJECT_NAME, projects)
-
-    if billing_enabled:
+    if billing_enabled := __is_billing_enabled(PROJECT_NAME, projects):
         __disable_billing_for_project(PROJECT_NAME, projects)
     else:
         print('Billing already disabled')

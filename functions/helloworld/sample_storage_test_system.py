@@ -36,8 +36,7 @@ def storage_client():
 
 @pytest.fixture(scope='module')
 def bucket_object(storage_client):
-    bucket_object = storage_client.get_bucket(BUCKET)
-    yield bucket_object
+    yield storage_client.get_bucket(BUCKET)
 
 
 @pytest.fixture(scope='module')

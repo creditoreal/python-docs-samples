@@ -30,9 +30,7 @@ def index():
 
     # Keep the paragraph tags
     bleach.sanitizer.ALLOWED_TAGS.append('p')
-    # Sanitize and return
-    clean = bleach.clean(html, strip=True)
-    return clean
+    return bleach.clean(html, strip=True)
 
 
 if __name__ == "__main__":

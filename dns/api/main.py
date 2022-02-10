@@ -90,12 +90,11 @@ def create_command(args):
 
 def get_command(args):
     """Gets a zone by name."""
-    zone = get_zone(args.project_id, args.name)
-    if not zone:
-        print('Zone not found.')
-    else:
+    if zone := get_zone(args.project_id, args.name):
         print('Zone: {}, {}, {}'.format(
             zone.name, zone.dns_name, zone.description))
+    else:
+        print('Zone not found.')
 
 
 def list_command(args):

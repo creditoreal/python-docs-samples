@@ -78,8 +78,7 @@ def _get_firebase_db_url():
 def _get_session():
     """Provides an authed requests session object."""
     creds, _ = google.auth.default(scopes=[_FIREBASE_SCOPES])
-    authed_session = AuthorizedSession(creds)
-    return authed_session
+    return AuthorizedSession(creds)
 
 
 def _send_firebase_message(u_id, message=None):

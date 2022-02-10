@@ -41,10 +41,7 @@ def detect_text(bucket, filename):
     )
     text_detection_response = vision_client.text_detection(image=image)
     annotations = text_detection_response.text_annotations
-    if len(annotations) > 0:
-        text = annotations[0].description
-    else:
-        text = ""
+    text = annotations[0].description if len(annotations) > 0 else ""
     print("Extracted text {} from image ({} chars).".format(text, len(text)))
 
     detect_language_response = translate_client.detect_language(text)
@@ -55,7 +52,7 @@ def detect_text(bucket, filename):
     to_langs = os.environ["TO_LANG"].split(",")
     for target_lang in to_langs:
         topic_name = os.environ["TRANSLATE_TOPIC"]
-        if src_lang == target_lang or src_lang == "und":
+        if src_lang in [target_lang, "und"]:
             topic_name = os.environ["RESULT_TOPIC"]
         message = {
             "text": text,
@@ -113,12 +110,11 @@ def process_image(file, context):
 
 # [START functions_ocr_translate]
 def translate_text(event, context):
-    if event.get("data"):
-        message_data = base64.b64decode(event["data"]).decode("utf-8")
-        message = json.loads(message_data)
-    else:
+    if not event.get("data"):
         raise ValueError("Data sector is missing in the Pub/Sub message.")
 
+    message_data = base64.b64decode(event["data"]).decode("utf-8")
+    message = json.loads(message_data)
     text = validate_message(message, "text")
     filename = validate_message(message, "filename")
     target_lang = validate_message(message, "lang")
@@ -145,12 +141,11 @@ def translate_text(event, context):
 
 # [START functions_ocr_save]
 def save_result(event, context):
-    if event.get("data"):
-        message_data = base64.b64decode(event["data"]).decode("utf-8")
-        message = json.loads(message_data)
-    else:
+    if not event.get("data"):
         raise ValueError("Data sector is missing in the Pub/Sub message.")
 
+    message_data = base64.b64decode(event["data"]).decode("utf-8")
+    message = json.loads(message_data)
     text = validate_message(message, "text")
     filename = validate_message(message, "filename")
     lang = validate_message(message, "lang")

@@ -50,9 +50,7 @@ def echo():
 # [START endpoints_auth_info_backend]
 def auth_info():
     """Retrieves the authenication information from Google Cloud Endpoints."""
-    encoded_info = request.headers.get('X-Endpoint-API-UserInfo', None)
-
-    if encoded_info:
+    if encoded_info := request.headers.get('X-Endpoint-API-UserInfo', None):
         info_json = _base64_decode(encoded_info)
         user_info = json.loads(info_json)
     else:

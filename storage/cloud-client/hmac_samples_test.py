@@ -61,7 +61,7 @@ def new_hmac_key():
     )
     if hmac_key.state == "DELETED":
         return
-    if not hmac_key.state == "INACTIVE":
+    if hmac_key.state != "INACTIVE":
         hmac_key.state = "INACTIVE"
         hmac_key.update()
     hmac_key.delete()

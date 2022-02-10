@@ -32,7 +32,7 @@ def run(host, port, api_key, auth_token, timeout):
     if api_key:
         metadata.append(('x-api-key', api_key))
     if auth_token:
-        metadata.append(('authorization', 'Bearer ' + auth_token))
+        metadata.append(('authorization', f'Bearer {auth_token}'))
     shelves = stub.ListShelves(empty_pb2.Empty(), timeout, metadata=metadata)
     print('ListShelves: {}'.format(shelves))
 

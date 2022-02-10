@@ -75,7 +75,7 @@ def main(project, model, version=None):
             result = predict_json(
                 project, model, user_input, version=version)
         except RuntimeError as err:
-            print(str(err))
+            print(err)
         else:
             print(result)
 

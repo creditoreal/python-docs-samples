@@ -70,9 +70,7 @@ def trip_duration(duration):
 
 def station_name(name):
     """Replaces '&' with '/' with a 50% chance"""
-    if not name:
-        return None
-    return random.choice([name, name.replace("&", "/")])
+    return None if not name else random.choice([name, name.replace("&", "/")])
 
 
 def user_type(user):

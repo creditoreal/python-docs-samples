@@ -19,7 +19,7 @@ import snippets
 
 def test_set_in_process_cache_policy(testbed):
     def policy(key):
-        return 1 == 1
+        return True
 
     snippets.set_in_process_cache_policy(policy)
     assert policy == ndb.get_context().get_cache_policy()

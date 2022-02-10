@@ -26,9 +26,7 @@ import webapp2
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        # [START user_details]
-        user = users.get_current_user()
-        if user:
+        if user := users.get_current_user():
             nickname = user.nickname()
             logout_url = users.create_logout_url('/')
             greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
@@ -43,8 +41,7 @@ class MainPage(webapp2.RequestHandler):
 
 class AdminPage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user:
+        if user := users.get_current_user():
             if users.is_current_user_admin():
                 self.response.write('You are an administrator.')
             else:

@@ -24,7 +24,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import Error
 
 client_service = build('jobs', 'v3')
-parent = 'projects/' + os.environ['GOOGLE_CLOUD_PROJECT']
+parent = f'projects/{os.environ["GOOGLE_CLOUD_PROJECT"]}'
 
 # [END jobs_instantiate]
 

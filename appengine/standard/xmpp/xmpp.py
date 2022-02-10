@@ -78,17 +78,12 @@ class SendChatHandler(webapp2.RequestHandler):
         status_code = xmpp.send_message(user_address, msg)
         chat_message_sent = (status_code == xmpp.NO_ERROR)
 
-        if not chat_message_sent:
-            # Send an email message instead...
-            # [END send-chat-to-user]
-            pass
-
 
 # [START chat]
 class XMPPHandler(webapp2.RequestHandler):
     def post(self):
         message = xmpp.Message(self.request.POST)
-        if message.body[0:5].lower() == 'hello':
+        if message.body[:5].lower() == 'hello':
             message.reply("Greetings!")
 # [END chat]
 

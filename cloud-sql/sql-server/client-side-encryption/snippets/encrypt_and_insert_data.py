@@ -42,7 +42,7 @@ def main() -> None:
     # e.g. "project-name:region:instance-name"
 
     credentials = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-    key_uri = "gcp-kms://" + os.environ["GCP_KMS_URI"]
+    key_uri = f'gcp-kms://{os.environ["GCP_KMS_URI"]}'
     # e.g. "gcp-kms://projects/...path/to/key
     # Tink uses the "gcp-kms://" prefix for paths to keys stored in Google
     # Cloud KMS. For more info on creating a KMS key and getting its path, see
@@ -80,7 +80,7 @@ def encrypt_and_insert_data(
     # data, but not its secrecy. (see RFC 5116 for more info)
     encrypted_email = env_aead.encrypt(email.encode(), team.encode())
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.error(f"Invalid team specified: {team}")
         return
 

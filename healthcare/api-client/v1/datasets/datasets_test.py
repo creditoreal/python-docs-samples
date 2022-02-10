@@ -70,7 +70,7 @@ def test_dataset():
             datasets.delete_dataset(project_id, cloud_region, dataset_id)
         except HttpError as err:
             # The API returns 403 when the dataset doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print("Got exception {} while deleting dataset".format(err.resp.status))
             else:
                 raise
@@ -94,7 +94,7 @@ def dest_dataset_id():
             datasets.delete_dataset(project_id, cloud_region, destination_dataset_id)
         except HttpError as err:
             # The API returns 403 when the dataset doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print("Got exception {} while deleting dataset".format(err.resp.status))
             else:
                 raise
@@ -118,7 +118,7 @@ def crud_dataset_id():
             datasets.delete_dataset(project_id, cloud_region, dataset_id)
         except HttpError as err:
             # The API returns 403 when the dataset doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print("Got exception {} while deleting dataset".format(err.resp.status))
             else:
                 raise

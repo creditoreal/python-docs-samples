@@ -63,7 +63,7 @@ def test_dataset():
             datasets.delete_dataset(project_id, location, dataset_id)
         except HttpError as err:
             # The API returns 403 when the dataset doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print("Got exception {} while deleting dataset".format(err.resp.status))
             else:
                 raise
@@ -105,7 +105,7 @@ def test_hl7v2_store():
             )
         except HttpError as err:
             # The API returns 403 when the HL7v2 store doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print(
                     "Got exception {} while deleting HL7v2 store".format(
                         err.resp.status
@@ -130,7 +130,7 @@ def crud_hl7v2_store_id():
             )
         except HttpError as err:
             # The API returns 403 when the HL7v2 store doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print(
                     "Got exception {} while deleting HL7v2 store".format(
                         err.resp.status

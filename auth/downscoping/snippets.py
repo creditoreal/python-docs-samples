@@ -119,7 +119,7 @@ def token_consumer(bucket_name, object_name):
         # here. This field is not required if access to all bucket resources are
         # allowed. If access to limited resources in the bucket is needed, this
         # mechanism can be used.
-        return get_token_from_broker(bucket_name, object_prefix=object_name[0:3])
+        return get_token_from_broker(bucket_name, object_prefix=object_name[:3])
 
     creds = credentials.Credentials(
         None,

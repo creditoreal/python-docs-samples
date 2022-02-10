@@ -110,12 +110,11 @@ def get_revision_tags(service: dict) -> List[str]:
     """
     Get all tags associated to a service
     """
-    revs = []
-
-    for revision in service["status"]["traffic"]:
-        if revision.get("tag", None):
-            revs.append(revision)
-    return revs
+    return [
+        revision
+        for revision in service["status"]["traffic"]
+        if revision.get("tag", None)
+    ]
 
 
 def github_token(project_id: str, ghtoken_secretname: str) -> str:
@@ -127,9 +126,7 @@ def github_token(project_id: str, ghtoken_secretname: str) -> str:
     except NotFound as e:
         error(e, context=f"finding secret {ghtoken_secretname}")
 
-    # The secret was encoded for you as part of the secret creation, so decode it now.
-    github_token = response.payload.data.decode("UTF-8").strip()
-    return github_token
+    return response.payload.data.decode("UTF-8").strip()
 
 
 @click.group()

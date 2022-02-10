@@ -29,7 +29,7 @@ CUSTOM_ROLE_DESCRIPTION = "This is a python test custom role"
 CUSTOM_ROLE_PERMISSIONS = ["iam.roles.get"]
 CUSTOM_ROLE_STAGE = "GA"
 CUSTOM_ROLE_EMAIL = (
-    CUSTOM_ROLE_NAME + "@" + GCLOUD_PROJECT + ".iam.gserviceaccount.com"
+    f'{CUSTOM_ROLE_NAME}@{GCLOUD_PROJECT}.iam.gserviceaccount.com'
 )
 
 
@@ -68,8 +68,9 @@ def unique_custom_role_name():
 
 def test_query_testable_permissions(capsys):
     custom_roles.query_testable_permissions(
-        "//cloudresourcemanager.googleapis.com/projects/" + GCLOUD_PROJECT
+        f'//cloudresourcemanager.googleapis.com/projects/{GCLOUD_PROJECT}'
     )
+
     out, _ = capsys.readouterr()
     # Just make sure the sample printed out multiple permissions.
     assert "\n" in out

@@ -291,10 +291,9 @@ async def test_delete_full_collection():
     "having the admin client and definition integrated"
     "into the test setup"
 )
-# TODO: b/132092178
 async def test_collection_group_query(db):
     museum_docs = await snippets.collection_group_query(db)
-    names = set([museum.name for museum in museum_docs])
+    names = {museum.name for museum in museum_docs}
     assert names == {
         u"Legion of Honor",
         u"The Getty",

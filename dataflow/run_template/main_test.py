@@ -97,10 +97,7 @@ def get_job_id_from_name(job_name):
 # We retry the cancel operation a few times until the job is in a state where it can be cancelled
 @backoff.on_exception(backoff.expo, HttpError, max_time=RETRY_MAX_TIME)
 def dataflow_jobs_cancel(job_name):
-    # to cancel a dataflow job, we need its ID, not its name
-    job_id = get_job_id_from_name(job_name)
-
-    if job_id:
+    if job_id := get_job_id_from_name(job_name):
         # Cancel the Dataflow job if it exists. If it doesn't, job_id will be equal to None. For more info, see: https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs/update
         request = (
             dataflow.projects()

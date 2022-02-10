@@ -144,9 +144,7 @@ def hello_content(request):
             name = request_json['name']
         else:
             raise ValueError("JSON is invalid, or missing a 'name' property")
-    elif content_type == 'application/octet-stream':
-        name = request.data
-    elif content_type == 'text/plain':
+    elif content_type in ['application/octet-stream', 'text/plain']:
         name = request.data
     elif content_type == 'application/x-www-form-urlencoded':
         name = request.form.get('name')

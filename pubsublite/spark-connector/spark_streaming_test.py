@@ -39,7 +39,7 @@ CLUSTER_ID = os.environ["PUBSUBLITE_CLUSTER_ID"]
 BUCKET = os.environ["PUBSUBLITE_BUCKET_ID"]
 UUID = uuid.uuid4().hex
 TOPIC_ID = "spark-streaming-topic-" + UUID
-SUBSCRIPTION_ID = "spark-streaming-subscription-" + UUID
+SUBSCRIPTION_ID = f'spark-streaming-subscription-{UUID}'
 PERMANENT_TOPIC_ID = "spark-streaming-topic"
 CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
 
@@ -114,7 +114,7 @@ def pyfile(source_file: str) -> str:
     destination_blob_name = os.path.join(UUID, source_file)
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file)
-    return "gs://" + blob.bucket.name + "/" + blob.name
+    return f'gs://{blob.bucket.name}/{blob.name}'
 
 
 def test_spark_streaming_to_pubsublite(topic: Topic) -> None:
@@ -150,9 +150,10 @@ def test_spark_streaming_to_pubsublite(topic: Topic) -> None:
             "project_id": PROJECT_ID,
             "region": CLOUD_REGION,
             "job": job,
-            "request_id": "write-" + UUID,
+            "request_id": f'write-{UUID}',
         }
     )
+
     response = operation.result()
 
     # Dataproc job output gets saved to the Google Cloud Storage bucket
@@ -204,9 +205,10 @@ def test_spark_streaming_from_pubsublite(subscription: Subscription) -> None:
             "project_id": PROJECT_ID,
             "region": CLOUD_REGION,
             "job": job,
-            "request_id": "read-" + UUID,
+            "request_id": f'read-{UUID}',
         }
     )
+
     response = operation.result()
 
     # Dataproc job output gets saved to the Google Cloud Storage bucket

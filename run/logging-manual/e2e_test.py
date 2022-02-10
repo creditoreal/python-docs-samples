@@ -191,7 +191,7 @@ def test_end_to_end(service_url_auth_token, deployed_service):
     found = False
     for x in range(10):
         iterator = client.list_log_entries({"resource_names": resource_names, "filter": filters})
-        for entry in iterator:
+        for _ in iterator:
             found = True
             # If there are any results, exit loop
             break

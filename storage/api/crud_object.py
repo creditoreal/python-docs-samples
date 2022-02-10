@@ -41,8 +41,7 @@ def main(bucket, filename, readers=[], owners=[]):
         get_object(bucket, filename, out_file=tmpfile)
 
     print('Deleting object..')
-    resp = delete_object(bucket, filename)
-    if resp:
+    if resp := delete_object(bucket, filename):
         print(json.dumps(resp, indent=2))
     print('Done')
 
@@ -107,7 +106,7 @@ def get_object(bucket, filename, out_file):
     downloader = googleapiclient.http.MediaIoBaseDownload(out_file, req)
 
     done = False
-    while done is False:
+    while not done:
         status, done = downloader.next_chunk()
         print("Download {}%.".format(int(status.progress() * 100)))
 
@@ -118,9 +117,7 @@ def delete_object(bucket, filename):
     service = create_service()
 
     req = service.objects().delete(bucket=bucket, object=filename)
-    resp = req.execute()
-
-    return resp
+    return req.execute()
 
 
 if __name__ == '__main__':

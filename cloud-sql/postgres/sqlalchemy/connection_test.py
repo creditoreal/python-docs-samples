@@ -57,7 +57,7 @@ env_map = {
 
 @pytest.fixture(scope="module")
 def tcp_db_connection():
-    tcp_env_map = {key: value for key, value in env_map.items()}
+    tcp_env_map = dict(env_map.items())
     tcp_env_map["POSTGRES_HOST"] = "DB_HOST"
 
     with mapped_env_variables(tcp_env_map):

@@ -44,10 +44,7 @@ def get_google_public_cert_key():
     certificate = x509.load_pem_x509_certificate(
         r.content, default_backend())
 
-    # Get the certicate's public key.
-    public_key = certificate.public_key()
-
-    return public_key
+    return certificate.public_key()
 
 
 def wrap_rsa_key(public_key, private_key_bytes):
@@ -60,8 +57,7 @@ def wrap_rsa_key(public_key, private_key_bytes):
             mgf=padding.MGF1(algorithm=hashes.SHA1()),
             algorithm=hashes.SHA1(),
             label=None))
-    encoded_wrapped_key = base64.b64encode(wrapped_key)
-    return encoded_wrapped_key
+    return base64.b64encode(wrapped_key)
 
 
 def main(key_file):

@@ -26,9 +26,7 @@ def get_requester_pays_status(bucket_name):
     storage_client = storage.Client()
 
     bucket = storage_client.get_bucket(bucket_name)
-    requester_pays_status = bucket.requester_pays
-
-    if requester_pays_status:
+    if requester_pays_status := bucket.requester_pays:
         print("Requester Pays is enabled for {}".format(bucket_name))
     else:
         print("Requester Pays is disabled for {}".format(bucket_name))
