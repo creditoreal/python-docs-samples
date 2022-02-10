@@ -35,10 +35,10 @@ def view_grantable_roles(full_resource_name):
 
     for role in roles['roles']:
         if 'title' in role:
-            print('Title: ' + role['title'])
-        print('Name: ' + role['name'])
+            print(f'Title: {role["title"]}')
+        print(f'Name: {role["name"]}')
         if 'description' in role:
-            print('Description: ' + role['description'])
+            print(f'Description: {role["description"]}')
         print(' ')
 # [END iam_view_grantable_roles]
 

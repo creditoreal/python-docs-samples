@@ -24,7 +24,7 @@ import time
 from googleapiclient.discovery import build
 
 client_service = build('jobs', 'v3')
-parent = 'projects/' + os.environ['GOOGLE_CLOUD_PROJECT']
+parent = f'projects/{os.environ["GOOGLE_CLOUD_PROJECT"]}'
 # [END instantiate]
 
 

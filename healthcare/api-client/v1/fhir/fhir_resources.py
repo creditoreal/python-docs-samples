@@ -421,7 +421,7 @@ def list_resource_history(
     # Sets required application/fhir+json header on the request
     headers = {"Content-Type": "application/fhir+json;charset=utf-8"}
 
-    response = session.get(resource_path + "/_history", headers=headers)
+    response = session.get(f'{resource_path}/_history', headers=headers)
     response.raise_for_status()
 
     resource = response.json()

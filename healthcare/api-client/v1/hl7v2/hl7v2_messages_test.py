@@ -63,7 +63,7 @@ def test_dataset():
             datasets.delete_dataset(project_id, location, dataset_id)
         except HttpError as err:
             # The API returns 403 when the dataset doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print("Got exception {} while deleting dataset".format(err.resp.status))
             else:
                 raise
@@ -105,7 +105,7 @@ def test_hl7v2_store():
             )
         except HttpError as err:
             # The API returns 403 when the HL7v2 store doesn't exist.
-            if err.resp.status == 404 or err.resp.status == 403:
+            if err.resp.status in [404, 403]:
                 print(
                     "Got exception {} while deleting HL7v2 store".format(
                         err.resp.status
@@ -132,8 +132,7 @@ def test_CRUD_hl7v2_message(test_dataset, test_hl7v2_store, capsys):
         hl7v2_message_name = hl7v2_messages_list[0].get("name")
         elms = hl7v2_message_name.split("/", 9)
         assert len(elms) >= 10
-        hl7v2_message_id = elms[9]
-        return hl7v2_message_id
+        return elms[9]
 
     hl7v2_message_id = run_eventually_consistent_test()
 
@@ -168,8 +167,7 @@ def test_ingest_hl7v2_message(test_dataset, test_hl7v2_store, capsys):
         hl7v2_message_name = hl7v2_messages_list[0].get("name")
         elms = hl7v2_message_name.split("/", 9)
         assert len(elms) >= 10
-        hl7v2_message_id = elms[9]
-        return hl7v2_message_id
+        return elms[9]
 
     hl7v2_message_id = run_eventually_consistent_test()
 
@@ -204,8 +202,7 @@ def test_patch_hl7v2_message(test_dataset, test_hl7v2_store, capsys):
         hl7v2_message_name = hl7v2_messages_list[0].get("name")
         elms = hl7v2_message_name.split("/", 9)
         assert len(elms) >= 10
-        hl7v2_message_id = elms[9]
-        return hl7v2_message_id
+        return elms[9]
 
     hl7v2_message_id = run_eventually_consistent_test()
 

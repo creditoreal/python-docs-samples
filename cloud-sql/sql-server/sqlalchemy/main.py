@@ -88,9 +88,10 @@ def init_tcp_connection_engine(db_config):
     if db_hostname == "localhost":
         db_hostname = "127.0.0.1"
 
-    # The SQLAlchemy engine will help manage interactions, including automatically
-    # managing a pool of connections to your database
-    pool = sqlalchemy.create_engine(
+    # [END cloud_sql_sqlserver_sqlalchemy_create_tcp]
+    # [END cloud_sql_server_sqlalchemy_create_tcp]
+
+    return sqlalchemy.create_engine(
         # Equivalent URL:
         # mssql+pytds://<db_user>:<db_pass>@/<host>:<port>/<db_name>?driver=ODBC+Driver+17+for+SQL+Server
         sqlalchemy.engine.url.URL.create(
@@ -103,10 +104,6 @@ def init_tcp_connection_engine(db_config):
         ),
         **db_config
     )
-    # [END cloud_sql_sqlserver_sqlalchemy_create_tcp]
-    # [END cloud_sql_server_sqlalchemy_create_tcp]
-
-    return pool
 
 
 # This global variable is declared with a value of `None`, instead of calling
@@ -147,8 +144,9 @@ def get_index_context():
             "SELECT TOP(5) candidate, time_cast FROM votes " "ORDER BY time_cast DESC"
         ).fetchall()
         # Convert the results into a list of dicts representing votes
-        for row in recent_votes:
-            votes.append({"candidate": row[0], "time_cast": row[1]})
+        votes.extend(
+            {"candidate": row[0], "time_cast": row[1]} for row in recent_votes
+        )
 
         stmt = sqlalchemy.text(
             "SELECT COUNT(vote_id) FROM votes WHERE candidate=:candidate"
@@ -172,7 +170,7 @@ def save_vote():
     team = request.form["team"]
     time_cast = datetime.datetime.utcnow()
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.warning(team)
         return Response(response="Invalid team specified.", status=400)
 

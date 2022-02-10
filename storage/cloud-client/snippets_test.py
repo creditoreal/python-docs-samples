@@ -353,7 +353,7 @@ def test_bucket_lifecycle_management(test_bucket, capsys):
     )
     out, _ = capsys.readouterr()
     assert "[]" in out
-    assert len(list(bucket.lifecycle_rules)) == 0
+    assert not list(bucket.lifecycle_rules)
 
 
 def test_create_bucket_class_location(test_bucket_create):
@@ -453,7 +453,7 @@ def test_delete_blobs_archived_generation(test_blob, capsys):
         test_blob.bucket.name, test_blob.name, test_blob.generation
     )
     out, _ = capsys.readouterr()
-    assert "blob " + test_blob.name + " was deleted" in out
+    assert f'blob {test_blob.name} was deleted' in out
     blob = test_blob.bucket.get_blob(test_blob.name, generation=test_blob.generation)
     assert blob is None
 

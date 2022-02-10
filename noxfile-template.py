@@ -74,13 +74,12 @@ TEST_CONFIG.update(TEST_CONFIG_OVERRIDE)
 
 def get_pytest_env_vars() -> Dict[str, str]:
     """Returns a dict for pytest invocation."""
-    ret = {}
-
     # Override the GCLOUD_PROJECT and the alias.
     env_key = TEST_CONFIG['gcloud_project_env']
-    # This should error out if not set.
-    ret['GOOGLE_CLOUD_PROJECT'] = os.environ[env_key]
-    ret['GCLOUD_PROJECT'] = os.environ[env_key]  # deprecated
+    ret = {
+        'GOOGLE_CLOUD_PROJECT': os.environ[env_key],
+        'GCLOUD_PROJECT': os.environ[env_key],
+    }
 
     # Apply user supplied envs.
     ret.update(TEST_CONFIG['envs'])
@@ -230,7 +229,7 @@ def _get_repo_root() -> Optional[str]:
     # Get root of this repository.
     # Assume we don't have directories nested deeper than 10 items.
     p = Path(os.getcwd())
-    for i in range(10):
+    for _ in range(10):
         if p is None:
             break
         if Path(p / ".git").exists():
@@ -239,7 +238,7 @@ def _get_repo_root() -> Optional[str]:
     raise Exception("Unable to detect repository root.")
 
 
-GENERATED_READMES = sorted([x for x in Path(".").rglob("*.rst.in")])
+GENERATED_READMES = sorted(list(Path(".").rglob("*.rst.in")))
 
 
 @nox.session

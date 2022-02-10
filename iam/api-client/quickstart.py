@@ -52,10 +52,9 @@ def initialize_service():
         filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
         scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
-    crm_service = googleapiclient.discovery.build(
+    return googleapiclient.discovery.build(
         "cloudresourcemanager", "v1", credentials=credentials
     )
-    return crm_service
 
 
 def modify_policy_add_role(crm_service, project_id, role, member):
@@ -63,11 +62,7 @@ def modify_policy_add_role(crm_service, project_id, role, member):
 
     policy = get_policy(crm_service, project_id)
 
-    binding = None
-    for b in policy["bindings"]:
-        if b["role"] == role:
-            binding = b
-            break
+    binding = next((b for b in policy["bindings"] if b["role"] == role), None)
     if binding is not None:
         binding["members"].append(member)
     else:
@@ -92,7 +87,7 @@ def modify_policy_remove_member(crm_service, project_id, role, member):
 def get_policy(crm_service, project_id, version=3):
     """Gets IAM policy for a project."""
 
-    policy = (
+    return (
         crm_service.projects()
         .getIamPolicy(
             resource=project_id,
@@ -100,7 +95,6 @@ def get_policy(crm_service, project_id, version=3):
         )
         .execute()
     )
-    return policy
 
 
 def set_policy(crm_service, project_id, policy):

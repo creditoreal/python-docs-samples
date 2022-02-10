@@ -233,6 +233,4 @@ def retry_or_not(data, context):
         error_client.report_exception()
         if try_again:
             raise  # Raise the exception and try again
-        else:
-            pass   # Swallow the exception and don't retry
 # [END functions_tips_retry]

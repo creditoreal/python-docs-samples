@@ -28,6 +28,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/concepts/variables.html
 * email - The email used to receive DAG updates.
 """
 
+
 import datetime
 
 # [START composer_notify_failure_airflow_1]
@@ -50,7 +51,7 @@ from airflow.utils import trigger_rule
 bq_dataset_name = 'airflow_bq_notify_dataset_{{ ds_nodash }}'
 bq_recent_questions_table_id = bq_dataset_name + '.recent_questions'
 BQ_MOST_POPULAR_TABLE_NAME = 'most_popular'
-bq_most_popular_table_id = bq_dataset_name + '.' + BQ_MOST_POPULAR_TABLE_NAME
+bq_most_popular_table_id = f'{bq_dataset_name}.{BQ_MOST_POPULAR_TABLE_NAME}'
 output_file = 'gs://{gcs_bucket}/recent_questionsS.csv'.format(
     gcs_bucket=models.Variable.get('gcs_bucket'))
 
@@ -64,8 +65,10 @@ max_query_date = '2018-02-01'
 min_query_date = '2018-01-01'
 
 yesterday = datetime.datetime.combine(
-    datetime.datetime.today() - datetime.timedelta(1),
-    datetime.datetime.min.time())
+    datetime.datetime.now() - datetime.timedelta(1),
+    datetime.datetime.min.time(),
+)
+
 
 # [START composer_notify_failure_airflow_1]
 default_dag_args = {

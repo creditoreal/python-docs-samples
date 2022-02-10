@@ -337,8 +337,7 @@ def main():
             gateway_state.subscriptions[subscribe_topic] = (client_addr)
             print('Save mid {} for response {}'.format(mid, response))
             gateway_state.pending_subscribes[mid] = (client_addr, response)
-    else:
-        print('undefined action: {}'.format(action))
+    print('undefined action: {}'.format(action))
 
     print('Finished.')
 # [END iot_mqtt_run]

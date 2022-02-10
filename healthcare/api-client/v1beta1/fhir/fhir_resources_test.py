@@ -43,12 +43,9 @@ def fatal_code(e):
 
 @pytest.fixture(scope="module")
 def test_dataset():
-    dataset = fhir_stores.create_dataset(
+    yield fhir_stores.create_dataset(
         service_account_json, project_id, cloud_region, dataset_id
     )
-
-    yield dataset
-
     # Clean up
     fhir_stores.delete_dataset(
         service_account_json, project_id, cloud_region, dataset_id

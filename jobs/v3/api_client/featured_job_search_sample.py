@@ -23,7 +23,7 @@ import time
 from googleapiclient.discovery import build
 
 client_service = build('jobs', 'v3')
-parent = 'projects/' + os.environ['GOOGLE_CLOUD_PROJECT']
+parent = f'projects/{os.environ["GOOGLE_CLOUD_PROJECT"]}'
 # [END instantiate]
 
 
@@ -61,7 +61,7 @@ def search_featured_job(client_service, company_name):
     }
     job_query = {'query': 'Software Engineer'}
     if company_name is not None:
-        job_query.update({'company_names': [company_name]})
+        job_query['company_names'] = [company_name]
     request = {
         'search_mode': 'FEATURED_JOB_SEARCH',
         'request_metadata': request_metadata,

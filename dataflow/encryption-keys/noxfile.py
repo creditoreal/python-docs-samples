@@ -143,7 +143,7 @@ def _get_repo_root():
     """ Returns the root folder of the project. """
     # Get root of this repository. Assume we don't have directories nested deeper than 10 items.
     p = Path(os.getcwd())
-    for i in range(10):
+    for _ in range(10):
         if p is None:
             break
         if Path(p / ".git").exists():
@@ -152,7 +152,7 @@ def _get_repo_root():
     raise Exception("Unable to detect repository root.")
 
 
-GENERATED_READMES = sorted([x for x in Path(".").rglob("*.rst.in")])
+GENERATED_READMES = sorted(list(Path(".").rglob("*.rst.in")))
 
 
 @nox.session

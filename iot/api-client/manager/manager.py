@@ -152,16 +152,11 @@ def create_device(
     # Check that the device doesn't already exist
     client = iot_v1.DeviceManagerClient()
 
-    exists = False
-
     parent = client.registry_path(project_id, cloud_region, registry_id)
 
     devices = list(client.list_devices(request={"parent": parent}))
 
-    for device in devices:
-        if device.id == device_id:
-            exists = True
-
+    exists = any(device.id == device_id for device in devices)
     # Create the device
     device_template = {
         "id": device_id,
@@ -466,9 +461,7 @@ def get_iam_permissions(service_account_json, project_id, cloud_region, registry
 
     registry_path = client.registry_path(project_id, cloud_region, registry_id)
 
-    policy = client.get_iam_policy(request={"resource": registry_path})
-
-    return policy
+    return client.get_iam_policy(request={"resource": registry_path})
 
 
 def set_iam_permissions(
@@ -592,9 +585,11 @@ def list_gateways(service_account_json, project_id, cloud_region, registry_id):
     devices = list(client.list_devices(request={"parent": path, "field_mask": mask}))
 
     for device in devices:
-        if device.gateway_config is not None:
-            if device.gateway_config.gateway_type == 1:
-                print("Gateway ID: {}\n\t{}".format(device.id, device))
+        if (
+            device.gateway_config is not None
+            and device.gateway_config.gateway_type == 1
+        ):
+            print("Gateway ID: {}\n\t{}".format(device.id, device))
 
 
 def list_devices_for_gateway(

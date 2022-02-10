@@ -24,7 +24,7 @@ os.environ['QUEUE'] = str(uuid.uuid4())
 import main     # noqa: E402
 
 
-TEST_NAME = 'taskqueue-migration-' + os.environ['QUEUE']
+TEST_NAME = f'taskqueue-migration-{os.environ["QUEUE"]}'
 TEST_TASKS = {
     'alpha': 2,
     'beta': 1,
@@ -39,12 +39,9 @@ def queue():
     location = main.location
     parent = 'projects/{}/locations/{}'.format(project, location)
 
-    queue = main.client.create_queue(
-        parent=parent,
-        queue={'name': parent + '/queues/' + TEST_NAME}
+    yield main.client.create_queue(
+        parent=parent, queue={'name': f'{parent}/queues/{TEST_NAME}'}
     )
-
-    yield queue
 
     # Teardown - delete test queue, which also deletes tasks
 
@@ -93,7 +90,7 @@ def test_enqueuetasks(queue):
 
     # Post tasks stage, queueing them up
     for task in TEST_TASKS:
-        for i in range(TEST_TASKS[task]):
+        for _ in range(TEST_TASKS[task]):
             r = client.post('/', data={'key': task})
             assert r.status_code == 302
             assert r.headers.get('location').count('/') == 3
@@ -120,9 +117,9 @@ def test_enqueuetasks(queue):
         assert TEST_TASKS[key] == counters_found[key]
 
     # Did every task come from a POST?
-    for key in counters_found:
+    for key, value in counters_found.items():
         assert key in TEST_TASKS
-        assert counters_found[key] == TEST_TASKS[key]
+        assert value == TEST_TASKS[key]
 
     # Restore main globals
     main.queue = save_queue
@@ -138,7 +135,7 @@ def test_processtasks(entity_kind):
 
     # Push tasks as if from Cloud Tasks
     for key in TEST_TASKS:
-        for i in range(TEST_TASKS[key]):
+        for _ in range(TEST_TASKS[key]):
             r = client.post(
                 '/push-task',
                 data=key,

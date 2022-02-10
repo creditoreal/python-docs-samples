@@ -38,7 +38,7 @@ def main() -> None:
     # e.g. "project-name:region:instance-name"
 
     credentials = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-    key_uri = "gcp-kms://" + os.environ["GCP_KMS_URI"]
+    key_uri = f'gcp-kms://{os.environ["GCP_KMS_URI"]}'
     # e.g. "gcp-kms://projects/...path/to/key
     # Tink uses the "gcp-kms://" prefix for paths to keys stored in Google
     # Cloud KMS. For more info on creating a KMS key and getting its path, see

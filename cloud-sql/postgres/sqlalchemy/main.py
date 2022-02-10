@@ -164,12 +164,10 @@ def get_index_context():
             "ORDER BY time_cast DESC LIMIT 5"
         ).fetchall()
         # Convert the results into a list of dicts representing votes
-        for row in recent_votes:
-            votes.append({
+        votes.extend({
                 'candidate': row[0],
                 'time_cast': row[1]
-            })
-
+            } for row in recent_votes)
         stmt = sqlalchemy.text(
             "SELECT COUNT(vote_id) FROM votes WHERE candidate=:candidate")
         # Count number of votes for tabs
@@ -192,7 +190,7 @@ def save_vote():
     team = request.form['team']
     time_cast = datetime.datetime.utcnow()
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.warning(team)
         return Response(
             response="Invalid team specified.",

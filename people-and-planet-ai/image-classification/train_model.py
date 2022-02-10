@@ -117,7 +117,6 @@ def get_image(
     Returns:
         A (category, image_gcs_path) tuple.
     """
-    base_url = "https://lilablobssc.blob.core.windows.net/wcs-unzipped"
     category = image_info["category"]
     file_name = image_info["file_name"]
 
@@ -125,6 +124,7 @@ def get_image(
     image_gcs_path = f"{cloud_storage_path}/{file_name}"
     logging.info(f"loading image: {image_gcs_path}")
     if not beam.io.gcp.gcsio.GcsIO().exists(image_gcs_path):
+        base_url = "https://lilablobssc.blob.core.windows.net/wcs-unzipped"
         image_url = f"{base_url}/{file_name}"
         logging.info(f"image not found, downloading: {image_gcs_path} [{image_url}]")
         try:
@@ -305,11 +305,10 @@ def with_retries(f: Callable[[], Any], max_attempts: int = 3) -> Any:
         try:
             return f()
         except Exception as e:
-            if n < max_attempts:
-                logging.warning(f"Got an error, {n+1} of {max_attempts} attempts: {e}")
-                time.sleep(2 ** n + random.random())  # 2^n seconds + random jitter
-            else:
+            if n >= max_attempts:
                 raise e
+            logging.warning(f"Got an error, {n+1} of {max_attempts} attempts: {e}")
+            time.sleep(2 ** n + random.random())  # 2^n seconds + random jitter
 
 
 if __name__ == "__main__":

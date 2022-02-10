@@ -44,10 +44,7 @@ _BASE_URL = "https://cloudiotdevice.googleapis.com/v1"
 
 @pytest.fixture(scope="module")
 def test_topic():
-    topic = manager.create_iot_topic(project_id, topic_id)
-
-    yield topic
-
+    yield manager.create_iot_topic(project_id, topic_id)
     pubsub_client = pubsub.PublisherClient()
     topic_path = pubsub_client.topic_path(project_id, topic_id)
     pubsub_client.delete_topic(request={"topic": topic_path})

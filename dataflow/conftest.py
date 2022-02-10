@@ -27,7 +27,7 @@ import uuid
 import pytest
 
 # Default options.
-UUID = uuid.uuid4().hex[0:6]
+UUID = uuid.uuid4().hex[:6]
 PROJECT = os.environ["GOOGLE_CLOUD_PROJECT"]
 REGION = "us-central1"
 
@@ -37,7 +37,7 @@ POLL_INTERVAL_SEC = 60  # 1 minute in seconds
 HYPHEN_NAME_RE = re.compile(r"[^\w\d-]+")
 UNDERSCORE_NAME_RE = re.compile(r"[^\w\d_]+")
 
-PYTHON_VERSION = "".join(platform.python_version_tuple()[0:2])
+PYTHON_VERSION = "".join(platform.python_version_tuple()[:2])
 
 
 @dataclass
@@ -211,8 +211,9 @@ class Utils:
 
         if substitutions:
             cmd_substitutions = [
-                f"--substitutions={','.join([k + '=' + v for k, v in substitutions.items()])}"
+                f'--substitutions={",".join([f"{k}={v}" for k, v in substitutions.items()])}'
             ]
+
         else:
             cmd_substitutions = []
 
@@ -290,8 +291,7 @@ class Utils:
                 )
             )
             response = request.execute()
-            for job in response["jobs"]:
-                yield job
+            yield from response["jobs"]
 
     @staticmethod
     def dataflow_jobs_get(

@@ -45,10 +45,13 @@ test_video_file_name = "ChromeCast.mp4"
 test_overlay_image_file_name = "overlay.jpg"
 input_uri = "gs://" + bucket_name + "/" + test_video_file_name
 overlay_image_uri = "gs://" + bucket_name + "/" + test_overlay_image_file_name
-output_uri_for_preset = "gs://" + bucket_name + "/test-output-preset/"
-output_uri_for_template = "gs://" + bucket_name + "/test-output-template/"
-output_uri_for_adhoc = "gs://" + bucket_name + "/test-output-adhoc/"
-output_uri_for_static_overlay = "gs://" + bucket_name + "/test-output-static-overlay/"
+output_uri_for_preset = f'gs://{bucket_name}/test-output-preset/'
+output_uri_for_template = f'gs://{bucket_name}/test-output-template/'
+output_uri_for_adhoc = f'gs://{bucket_name}/test-output-adhoc/'
+output_uri_for_static_overlay = (
+    f'gs://{bucket_name}/test-output-static-overlay/'
+)
+
 output_uri_for_animated_overlay = (
     "gs://" + bucket_name + "/test-output-animated-overlay/"
 )
@@ -58,12 +61,14 @@ spritesheet_file_suffix = "0000000000.jpeg"
 
 output_dir_for_set_number_spritesheet = "test-output-set-number-spritesheet/"
 output_uri_for_set_number_spritesheet = (
-    "gs://" + bucket_name + "/" + output_dir_for_set_number_spritesheet
+    f'gs://{bucket_name}/{output_dir_for_set_number_spritesheet}'
 )
+
 output_dir_for_periodic_spritesheet = "test-output-periodic-spritesheet/"
 output_uri_for_periodic_spritesheet = (
-    "gs://" + bucket_name + "/" + output_dir_for_periodic_spritesheet
+    f'gs://{bucket_name}/{output_dir_for_periodic_spritesheet}'
 )
+
 preset = "preset/web-hd"
 job_succeeded_state = "ProcessingState.SUCCEEDED"
 test_data = os.path.join(os.path.dirname(__file__), "..", "testdata")

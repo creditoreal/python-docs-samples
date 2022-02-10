@@ -25,7 +25,7 @@ client_service = build('jobs', 'v3')
 
 def run_sample():
     try:
-        project_id = 'projects/' + os.environ['GOOGLE_CLOUD_PROJECT']
+        project_id = f'projects/{os.environ["GOOGLE_CLOUD_PROJECT"]}'
         response = client_service.projects().companies().list(
             parent=project_id).execute()
         print('Request Id: %s' %

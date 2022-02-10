@@ -28,6 +28,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/concepts/variables.html
 * email - The email used to receive DAG updates.
 """
 
+
 import datetime
 
 # [START composer_notify_failure]
@@ -80,8 +81,10 @@ MOST_POPULAR_QUERY = f"""
         """
 
 yesterday = datetime.datetime.combine(
-    datetime.datetime.today() - datetime.timedelta(1),
-    datetime.datetime.min.time())
+    datetime.datetime.now() - datetime.timedelta(1),
+    datetime.datetime.min.time(),
+)
+
 
 # [START composer_notify_failure]
 default_dag_args = {

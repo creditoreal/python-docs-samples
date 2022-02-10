@@ -157,13 +157,10 @@ def get_index_context() -> Dict:
             "ORDER BY time_cast DESC LIMIT 5"
         ).fetchall()
         # Convert the results into a list of dicts representing votes
-        for row in recent_votes:
-            votes.append(
-                {
+        votes.extend({
                     "candidate": row[0],
                     "time_cast": row[1],
-                }
-            )
+                } for row in recent_votes)
         stmt = sqlalchemy.text(
             "SELECT COUNT(vote_id) FROM pet_votes WHERE candidate=:candidate"
         )

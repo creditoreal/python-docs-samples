@@ -156,7 +156,7 @@ def main(project, bucket, zone, instance_name, wait=True):
 
     print('Instances in project %s and zone %s:' % (project, zone))
     for instance in instances:
-        print(' - ' + instance['name'])
+        print(f' - {instance["name"]}')
 
     print("""
 Instance created.

@@ -65,19 +65,17 @@ def create_role(name, project, title, description, permissions, stage):
     """Creates a role."""
 
     # pylint: disable=no-member
-    role = service.projects().roles().create(
-        parent='projects/' + project,
-        body={
-            'roleId': name,
-            'role': {
-                'title': title,
-                'description': description,
-                'includedPermissions': permissions,
-                'stage': stage
-            }
-        }).execute()
+    role = service.projects().roles().create(parent=f'projects/{project}', body={
+                'roleId': name,
+                'role': {
+                    'title': title,
+                    'description': description,
+                    'includedPermissions': permissions,
+                    'stage': stage
+                }
+            }).execute()
 
-    print('Created role: ' + role['name'])
+    print(f'Created role: {role["name"]}')
     return role
 # [END iam_create_role]
 
@@ -87,16 +85,23 @@ def edit_role(name, project, title, description, permissions, stage):
     """Creates a role."""
 
     # pylint: disable=no-member
-    role = service.projects().roles().patch(
-        name='projects/' + project + '/roles/' + name,
-        body={
-            'title': title,
-            'description': description,
-            'includedPermissions': permissions,
-            'stage': stage
-        }).execute()
+    role = (
+        service.projects()
+        .roles()
+        .patch(
+            name=f'projects/{project}/roles/{name}',
+            body={
+                'title': title,
+                'description': description,
+                'includedPermissions': permissions,
+                'stage': stage,
+            },
+        )
+        .execute()
+    )
 
-    print('Updated role: ' + role['name'])
+
+    print(f'Updated role: {role["name"]}')
     return role
 # [END iam_edit_role]
 
@@ -106,8 +111,12 @@ def list_roles(project_id):
     """Lists roles."""
 
     # pylint: disable=no-member
-    roles = service.roles().list(
-        parent='projects/' + project_id).execute()['roles']
+    roles = (
+        service.roles()
+        .list(parent=f'projects/{project_id}')
+        .execute()['roles']
+    )
+
     for role in roles:
         print(role['name'])
 # [END iam_list_roles]
@@ -118,13 +127,17 @@ def disable_role(name, project):
     """Disables a role."""
 
     # pylint: disable=no-member
-    role = service.projects().roles().patch(
-        name='projects/' + project + '/roles/' + name,
-        body={
-            'stage': 'DISABLED'
-        }).execute()
+    role = (
+        service.projects()
+        .roles()
+        .patch(
+            name=f'projects/{project}/roles/{name}', body={'stage': 'DISABLED'}
+        )
+        .execute()
+    )
 
-    print('Disabled role: ' + role['name'])
+
+    print(f'Disabled role: {role["name"]}')
     return role
 # [END iam_disable_role]
 
@@ -134,10 +147,15 @@ def delete_role(name, project):
     """Deletes a role."""
 
     # pylint: disable=no-member
-    role = service.projects().roles().delete(
-        name='projects/' + project + '/roles/' + name).execute()
+    role = (
+        service.projects()
+        .roles()
+        .delete(name=f'projects/{project}/roles/' + name)
+        .execute()
+    )
 
-    print('Deleted role: ' + name)
+
+    print(f'Deleted role: {name}')
     return role
 # [END iam_delete_role]
 
@@ -147,13 +165,17 @@ def undelete_role(name, project):
     """Undeletes a role."""
 
     # pylint: disable=no-member
-    role = service.projects().roles().patch(
-        name='projects/' + project + '/roles/' + name,
-        body={
-            'stage': 'DISABLED'
-        }).execute()
+    role = (
+        service.projects()
+        .roles()
+        .patch(
+            name=f'projects/{project}/roles/{name}', body={'stage': 'DISABLED'}
+        )
+        .execute()
+    )
 
-    print('Disabled role: ' + role['name'])
+
+    print(f'Disabled role: {role["name"]}')
     return role
 # [END iam_undelete_role]
 

@@ -39,8 +39,8 @@ def test_member():
     # section to create service account to test policy updates.
     # we use the first portion of uuid4 because full version is too long.
     name = f'test-{uuid.uuid4().hex[:25]}'
-    email = name + "@" + GCLOUD_PROJECT + ".iam.gserviceaccount.com"
-    member = "serviceAccount:" + email
+    email = f'{name}@{GCLOUD_PROJECT}.iam.gserviceaccount.com'
+    member = f'serviceAccount:{email}'
     create_service_account(
         GCLOUD_PROJECT, name, "Py Test Account"
     )
@@ -61,16 +61,21 @@ def create_service_account(project_id, name, display_name):
     service = googleapiclient.discovery.build(
         'iam', 'v1', credentials=credentials)
 
-    my_service_account = service.projects().serviceAccounts().create(
-        name='projects/' + project_id,
-        body={
-            'accountId': name,
-            'serviceAccount': {
-                'displayName': display_name
-            }
-        }).execute()
+    my_service_account = (
+        service.projects()
+        .serviceAccounts()
+        .create(
+            name=f'projects/{project_id}',
+            body={
+                'accountId': name,
+                'serviceAccount': {'displayName': display_name},
+            },
+        )
+        .execute()
+    )
 
-    print('Created service account: ' + my_service_account['email'])
+
+    print(f'Created service account: {my_service_account["email"]}')
     return my_service_account
 
 
@@ -87,7 +92,7 @@ def delete_service_account(email):
     service.projects().serviceAccounts().delete(
         name='projects/-/serviceAccounts/' + email).execute()
 
-    print('Deleted service account: ' + email)
+    print(f'Deleted service account: {email}')
 
 
 def test_quickstart(test_member, capsys):

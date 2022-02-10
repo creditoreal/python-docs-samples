@@ -149,13 +149,14 @@ with models.DAG(
         table_dest = record['table_dest']
 
         BQ_to_GCS = bigquery_to_gcs.BigQueryToCloudStorageOperator(
-            # Replace ":" with valid character for Airflow task
             task_id='{}_BQ_to_GCS'.format(table_source.replace(":", "_")),
             source_project_dataset_table=table_source,
-            destination_cloud_storage_uris=['{}-*.avro'.format(
-                'gs://' + source_bucket + '/' + table_source)],
-            export_format='AVRO'
+            destination_cloud_storage_uris=[
+                '{}-*.avro'.format(f'gs://{source_bucket}/{table_source}')
+            ],
+            export_format='AVRO',
         )
+
 
         GCS_to_GCS = gcs_to_gcs.GoogleCloudStorageToGoogleCloudStorageOperator(
             # Replace ":" with valid character for Airflow task

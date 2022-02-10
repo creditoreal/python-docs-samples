@@ -39,10 +39,7 @@ def get_session(service_account_json):
         ["https://www.googleapis.com/auth/cloud-platform"]
     )
 
-    # Create a requests Session object with the credentials.
-    session = requests.AuthorizedSession(scoped_credentials)
-
-    return session
+    return requests.AuthorizedSession(scoped_credentials)
 
 
 def create_patient(

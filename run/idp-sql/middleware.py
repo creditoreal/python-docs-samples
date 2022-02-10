@@ -29,17 +29,15 @@ default_app = firebase_admin.initialize_app()
 def jwt_authenticated(func: Callable[..., int]) -> Callable[..., int]:
     @wraps(func)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
-        header = request.headers.get("Authorization", None)
-        if header:
-            token = header.split(" ")[1]
-            try:
-                decoded_token = firebase_admin.auth.verify_id_token(token)
-            except Exception as e:
-                logger.exception(e)
-                return Response(status=403, response=f"Error with authentication: {e}")
-        else:
+        if not (header := request.headers.get("Authorization", None)):
             return Response(status=401)
 
+        token = header.split(" ")[1]
+        try:
+            decoded_token = firebase_admin.auth.verify_id_token(token)
+        except Exception as e:
+            logger.exception(e)
+            return Response(status=403, response=f"Error with authentication: {e}")
         request.uid = decoded_token["uid"]
         return func(*args, **kwargs)
 

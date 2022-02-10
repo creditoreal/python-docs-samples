@@ -20,13 +20,9 @@ async def quickstart_new_instance():
     # [START firestore_setup_client_create_async]
     from google.cloud import firestore
 
-    # The `project` parameter is optional and represents which project the client
-    # will act on behalf of. If not supplied, the client falls back to the default
-    # project inferred from the environment.
-    db = firestore.AsyncClient(project='my-project-id')
     # [END firestore_setup_client_create_async]
 
-    return db
+    return firestore.AsyncClient(project='my-project-id')
 
 
 async def quickstart_add_data_one():
@@ -279,11 +275,9 @@ async def structure_collection_ref():
 
 async def structure_doc_ref_alternate():
     db = firestore.AsyncClient()
-    # [START firestore_data_reference_document_path_async]
-    a_lovelace_ref = db.document("users/alovelace")
     # [END firestore_data_reference_document_path_async]
 
-    return a_lovelace_ref
+    return db.document("users/alovelace")
 
 
 async def structure_subcollection_ref():
@@ -443,11 +437,9 @@ async def compound_query_example():
     # Create a reference to the cities collection
     cities_ref = db.collection("cities")
 
-    # Create a query against the collection
-    query_ref = cities_ref.where("state", "==", "CA")
     # [END firestore_query_filter_eq_string_async]
 
-    return query_ref
+    return cities_ref.where("state", "==", "CA")
 
 
 async def compound_query_simple():
@@ -573,20 +565,18 @@ async def cursor_simple_start_at():
     db = firestore.AsyncClient()
     # [START firestore_query_cursor_start_at_field_value_single_async]
     cities_ref = db.collection("cities")
-    query_start_at = cities_ref.order_by("population").start_at({"population": 1000000})
     # [END firestore_query_cursor_start_at_field_value_single_async]
 
-    return query_start_at
+    return cities_ref.order_by("population").start_at({"population": 1000000})
 
 
 async def cursor_simple_end_at():
     db = firestore.AsyncClient()
     # [START firestore_query_cursor_end_at_field_value_single_async]
     cities_ref = db.collection("cities")
-    query_end_at = cities_ref.order_by("population").end_at({"population": 1000000})
     # [END firestore_query_cursor_end_at_field_value_single_async]
 
-    return query_end_at
+    return cities_ref.order_by("population").end_at({"population": 1000000})
 
 
 async def snapshot_cursors():
@@ -621,14 +611,15 @@ async def cursor_paginate():
     # multiple cities have the exact same population value
     last_pop = last_doc.to_dict()["population"]
 
-    next_query = (
-        cities_ref.order_by("population").start_after({"population": last_pop}).limit(3)
-    )
     # Use the query for pagination
     # ...
     # [END firestore_query_cursor_pagination_async]
 
-    return next_query
+    return (
+        cities_ref.order_by("population")
+        .start_after({"population": last_pop})
+        .limit(3)
+    )
 
 
 async def cursor_multiple_conditions():
@@ -678,7 +669,7 @@ async def delete_full_collection():
         async for doc in docs:
             print(f"Deleting doc {doc.id} => {doc.to_dict()}")
             await doc.reference.delete()
-            deleted = deleted + 1
+            deleted += 1
 
         if deleted >= batch_size:
             return delete_collection(coll_ref, batch_size)
@@ -731,10 +722,9 @@ async def array_contains_any_queries(db):
     # [START firestore_query_filter_array_contains_any_async]
     cities_ref = db.collection("cities")
 
-    query = cities_ref.where(
+    return cities_ref.where(
         "regions", "array_contains_any", ["west_coast", "east_coast"]
     )
-    return query
     # [END firestore_query_filter_array_contains_any_async]
 
 
@@ -742,8 +732,7 @@ async def in_query_without_array(db):
     # [START firestore_query_filter_in_async]
     cities_ref = db.collection("cities")
 
-    query = cities_ref.where("country", "in", ["USA", "Japan"])
-    return query
+    return cities_ref.where("country", "in", ["USA", "Japan"])
     # [END firestore_query_filter_in_async]
 
 
@@ -751,8 +740,7 @@ async def in_query_with_array(db):
     # [START firestore_query_filter_in_with_array_async]
     cities_ref = db.collection("cities")
 
-    query = cities_ref.where("regions", "in", [["west_coast"], ["east_coast"]])
-    return query
+    return cities_ref.where("regions", "in", [["west_coast"], ["east_coast"]])
     # [END firestore_query_filter_in_with_array_async]
 
 

@@ -177,15 +177,7 @@ def run_command(args):
         )
         return
 
-    elif args.command == "create-dataset":
-        create_fhir_store(
-            args.service_account_json,
-            args.project_id,
-            args.cloud_region,
-            args.dataset_id,
-        )
-
-    elif args.command == "delete-dataset":
+    elif args.command in ["create-dataset", "delete-dataset"]:
         create_fhir_store(
             args.service_account_json,
             args.project_id,
